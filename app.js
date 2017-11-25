@@ -16,7 +16,8 @@ const server = http.createServer((req, res) => {
 	res.setHeader('Content-Type', 'text/plain');
 	res.end('Hello World\n');
     } else {
-	// res.statusCode = 403;
+	res.statusCode = 404;
+	res.end();
     }
 });
 
