@@ -7,8 +7,9 @@ const port = process.env.PORT || 3000;
 const server = http.createServer((req, res) => {
     //Add error listener
     req.on('error', (err) => {
-	// This prints the error message and stack trace to `stderr`.
-	console.error(err.stack);
+	console.error(err);
+	res.statusCode = 400;
+	res.end();
     });
 
     if (req.url === '/' && req.method === 'GET') {
