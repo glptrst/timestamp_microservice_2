@@ -23,13 +23,30 @@ const server = http.createServer((req, res) => {
 	    //allow only url with format '/param'
 	    if (splittedUrl.length <= 2 || (splittedUrl.length === 3 && splittedUrl[2] === '')) {
 		if (Number.isInteger(Number(splittedUrl[1]))) { // if param is an integer
+		    // set header
 		    res.statusCode = 200;
 		    res.setHeader('Content-Type', 'application/json');
-		    res.write(JSON.stringify({
-			unix: splittedUrl[1],
-			natural: 'TODO'
-		    }));
-		    res.end();
+		    // get natural language date
+		    // helpful: https://stackoverflow.com/questions/847185/convert-a-unix-timestamp-to-time-in-javascript
+		    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleDateString
+		    var date = new Date(Number(splittedUrl[1])*1000);
+		    var options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' };
+		    var natLangDate = date.toLocaleDateString('en-US', options);
+		    if (natLangDate === 'Invalid Date') {
+			res.end(JSON.stringify((
+			    {
+				unix: null,
+				natural: null
+			    }
+			)));
+		    } else {
+	    		res.end(JSON.stringify((
+			    {
+				unix: splittedUrl[1],
+				natural: date.toLocaleDateString('en-US', options)
+			    }
+			)));
+		    }
 		} else { // if param is not an integer
 		    res.statusCode = 200;
 		    res.setHeader('Content-Type', 'application/json');
