@@ -12,16 +12,43 @@ const server = http.createServer((req, res) => {
 	res.end();
     });
 
-    if (req.url === '/' && req.method === 'GET') {
-	res.statusCode = 200;
-	res.setHeader('Content-Type', 'text/plain');
-	res.end('Hello World\n');
+    // Accept only GET method
+    if (req.method === 'GET') {
+	if (req.url === '/') {
+	    res.statusCode = 200;
+	    res.setHeader('Content-Type', 'text/plain');
+	    res.end('Hello World\n');
+	} else {
+	    var splittedUrl = req.url.split('/');
+	    //allow only url with format '/param'
+	    if (splittedUrl.length <= 2 || (splittedUrl.length === 3 && splittedUrl[2] === '')) {
+		if (Number.isInteger(Number(splittedUrl[1]))) { // if param is an integer
+		    res.statusCode = 200;
+		    res.setHeader('Content-Type', 'application/json');
+		    res.write(JSON.stringify({
+			unix: splittedUrl[1],
+			natural: 'TODO'
+		    }));
+		    res.end();
+		} else { // if param is not an integer
+		    res.statusCode = 200;
+		    res.setHeader('Content-Type', 'application/json');
+		    res.write(JSON.stringify({
+			unix: 'TODO',
+			natural: splittedUrl[1]
+		    }));
+		    res.end();
+		}
+	    } else {
+		res.statusCode = 404;
+		res.end();
+	    }
+	}
     } else {
 	res.statusCode = 404;
 	res.end();
     }
 });
-
 
 server.listen(port, () => {
     console.log(`Server running at port ${port}`);
