@@ -48,13 +48,84 @@ const server = http.createServer((req, res) => {
 			)));
 		    }
 		} else { // if param is not an integer
+		    // set headers
 		    res.statusCode = 200;
 		    res.setHeader('Content-Type', 'application/json');
-		    res.write(JSON.stringify({
-			unix: 'TODO',
-			natural: splittedUrl[1]
-		    }));
-		    res.end();
+
+		    let param = decodeURI(splittedUrl[1]);
+
+		    // check if it is a date in a correct format
+		    //the parameter splitted with ' ' should give an arrary of length three
+		    var splitted = param.split(' ');
+		    if (splitted.length !== 3) {
+			res.end(JSON.stringify(
+			    {
+				unix: null,
+				natural: null
+			    }
+			));
+		    } else {
+			// splitted[0] should be a string (it should be a month)
+			if (typeof splitted[0] === 'string') {
+			    // splitted[1] should be a number and a comma
+			    var shouldBeAnum = splitted[1].substring(0, splitted[1].length - 1);
+			    if (Number.isInteger(Number(shouldBeAnum))) {
+				var shouldBeAcomma = splitted[1].charAt(splitted[1].length - 1);
+				if (shouldBeAcomma === ',') {
+				    // splitted[2] should be a number
+				    if (Number.isInteger(Number(splitted[2]))) {
+					var month = splitted[0].substring(0, 3);
+					var day = splitted[1].substring(0, splitted[1].length - 1);
+					var year = splitted[2];
+					var unixTimestamp = Date.parse(String(month + ' ' + day + ', ' + year + ' UTC'));
+					if (isNaN(unixTimestamp)) { // if Date.parse returns a NaN, then there is still something wrong in the string given as a input
+					    res.end(JSON.stringify(
+						{
+						    unix: null,
+						    natural: null
+						}
+					    ));
+					} else {
+					    res.end(JSON.stringify(
+				    		{
+				    		    unix: unixTimestamp,
+				    		    natural: param
+				    		}
+					    ));
+					}
+				    } else {
+					res.end(JSON.stringify(
+					    {
+						unix: null,
+						natural: null
+					    }
+					));
+				    }
+				} else {
+				    res.end(JSON.stringify(
+					{
+					    unix: null,
+					    natural: null
+					}
+				    ));
+				}
+			    } else {
+				res.end(JSON.stringify(
+				    {
+					unix: null,
+					natural: null
+				    }
+				));
+			    }
+			} else {
+			    res.end(JSON.stringify(
+				{
+				    unix: null,
+				    natural: null
+				}
+			    ));
+			}
+		    }
 		}
 	    } else {
 		res.statusCode = 404;
