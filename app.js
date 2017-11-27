@@ -1,5 +1,6 @@
 "use strict";
 const http = require('http');
+const timestamp = require('./timestamp.js');
 
 const port = process.env.PORT || 3000;
 
@@ -22,31 +23,14 @@ const server = http.createServer((req, res) => {
 	    var splittedUrl = req.url.split('/');
 	    //allow only url with format '/param'
 	    if (splittedUrl.length <= 2 || (splittedUrl.length === 3 && splittedUrl[2] === '')) {
-		if (Number.isInteger(Number(splittedUrl[1]))) { // if param is an integer
+		if (Number.isInteger(Number(splittedUrl[1]))) { // if param is an integer (a unix param)
 		    // set header
 		    res.statusCode = 200;
 		    res.setHeader('Content-Type', 'application/json');
-		    // get natural language date
-		    // helpful: https://stackoverflow.com/questions/847185/convert-a-unix-timestamp-to-time-in-javascript
-		    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleDateString
-		    var date = new Date(Number(splittedUrl[1])*1000);
-		    var options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' };
-		    var natLangDate = date.toLocaleDateString('en-US', options);
-		    if (natLangDate === 'Invalid Date') {
-			res.end(JSON.stringify((
-			    {
-				unix: null,
-				natural: null
-			    }
-			)));
-		    } else {
-	    		res.end(JSON.stringify((
-			    {
-				unix: splittedUrl[1],
-				natural: date.toLocaleDateString('en-US', options)
-			    }
-			)));
-		    }
+		    // make response body
+		    let response = timestamp.makeTimestampObj(splittedUrl[1], 'unix');
+		    // send response
+		    res.end(JSON.stringify(response));
 		} else { // if param is not an integer
 		    // set headers
 		    res.statusCode = 200;
