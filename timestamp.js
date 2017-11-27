@@ -15,8 +15,49 @@ module.exports = {
 		return { unix: value, natural: natLangDate };
 	    }
 	} else if (type === 'natural') {
-	    // TODO
-	    return {unix: null, natural: null};
+	    // check if it is a date in a correct format
+	    //the parameter splitted with ' ' should give an arrary of length three
+	    var splitted = value.split(' ');
+	    if (splitted.length !== 3) {
+		console.log('splitted.length !== 3');
+		return {unix: null, natural: null};
+	    } else {
+		// splitted[0] should be a string (it should be a month)
+		if (typeof splitted[0] === 'string') {
+		    // splitted[1] should be a number and a comma
+		    var shouldBeAnum = splitted[1].substring(0, splitted[1].length - 1);
+		    if (Number.isInteger(Number(shouldBeAnum))) {
+			var shouldBeAcomma = splitted[1].charAt(splitted[1].length - 1);
+			if (shouldBeAcomma === ',') {
+			    // splitted[2] should be a number
+			    if (Number.isInteger(Number(splitted[2]))) {
+				var month = splitted[0].substring(0, 3);
+				var day = splitted[1].substring(0, splitted[1].length - 1);
+				var year = splitted[2];
+				var unixTimestamp = Date.parse(String(month + ' ' + day + ', ' + year + ' UTC'));
+				if (isNaN(unixTimestamp)) { // if Date.parse returns a NaN, then there is still something wrong in the string given as a input
+				    console.log('isNaNTimestamp');
+				    return {unix: null, natural: null};
+				} else {
+				    return {unix: unixTimestamp, natural: value};
+				}
+			    } else {
+				console.log("! Number.isInteger(Number(splitted[2]))");
+				return {unix: null, natural: null};
+			    }
+			} else {
+			    console.log("! shouldBeAcomma === ','");
+			    return {unix: null, natural: null};
+			}
+		    } else {
+			console.log('! Number.isInteger(Number(shouldBeAnum))');
+			return {unix: null, natural: null};
+		    }
+		} else {
+		    console.log("! (typeof splitted[0] === 'string')");
+		    return {unix: null, natural: null};
+		}
+	    }
 	} else {
 	    return null; 
 	}
