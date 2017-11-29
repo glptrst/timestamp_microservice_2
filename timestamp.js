@@ -10,6 +10,7 @@ module.exports = {
 	    var options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' };
 	    var natLangDate = date.toLocaleDateString('en-US', options);
 	    if (natLangDate === 'Invalid Date') {
+		console.log(`bad value: ${value}. (ERR: Invalid Date)`);
 		return { unix: null, natural: null };
 	    } else {
 		return { unix: value, natural: natLangDate };
@@ -19,7 +20,7 @@ module.exports = {
 	    //the parameter splitted with ' ' should give an arrary of length three
 	    var splitted = value.split(' ');
 	    if (splitted.length !== 3) {
-		console.log('splitted.length !== 3');
+		console.log(`bad value: ${value}. (ERR: splitted.length !== 3)`);
 		return {unix: null, natural: null};
 	    } else {
 		// splitted[0] should be a string (it should be a month)
@@ -36,25 +37,26 @@ module.exports = {
 				var year = splitted[2];
 				var unixTimestamp = Date.parse(String(month + ' ' + day + ', ' + year + ' UTC'))/1000;
 				if (isNaN(unixTimestamp)) { // if Date.parse returns a NaN, then there is still something wrong in the string given as a input
-				    console.log('isNaNTimestamp');
+				    console.log(`bad value: ${value}. (ERR: isNaNTimestamp)`);
 				    return {unix: null, natural: null};
 				} else {
 				    return {unix: unixTimestamp, natural: value};
 				}
 			    } else {
 				console.log("! Number.isInteger(Number(splitted[2]))");
+				console.log(`bad value: ${value}. (ERR: ! Number.isInteger(Number(splitted[2])) )`);
 				return {unix: null, natural: null};
 			    }
 			} else {
-			    console.log("! shouldBeAcomma === ','");
+			    console.log(`bad value: ${value}. (ERR: ! shouldBeAcomma === ',')`);
 			    return {unix: null, natural: null};
 			}
 		    } else {
-			console.log('! Number.isInteger(Number(shouldBeAnum))');
+			console.log(`bad value: ${value}. (ERR: ! Number.isInteger(Number(shouldBeAnum)))`);
 			return {unix: null, natural: null};
 		    }
 		} else {
-		    console.log("! (typeof splitted[0] === 'string')");
+		    console.log(`bad value: ${value}. (ERR: ! (typeof splitted[0] === 'string)`);
 		    return {unix: null, natural: null};
 		}
 	    }
