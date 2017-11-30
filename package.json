@@ -1,19 +1,22 @@
 {
-  "name": "timestamp_microservice_2",
-  "version": "1.0.0",
-  "description": "(only using built in modules in nodejs)",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/glptrst/timestamp_microservice_2.git"
-  },
-  "author": "",
-  "license": "GPL-3.0",
-  "bugs": {
-    "url": "https://github.com/glptrst/timestamp_microservice_2/issues"
-  },
-  "homepage": "https://github.com/glptrst/timestamp_microservice_2#readme"
+    "name": "timestamp_microservice_2",
+    "version": "1.0.0",
+    "description": "(only using built in modules in nodejs)",
+    "main": "app.js",
+    "scripts": {
+	"test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "engines": {
+	"node": "6.11.1"
+    },
+    "repository": {
+	"type": "git",
+	"url": "git+https://github.com/glptrst/timestamp_microservice_2.git"
+    },
+    "author": "",
+    "license": "GPL-3.0",
+    "bugs": {
+	"url": "https://github.com/glptrst/timestamp_microservice_2/issues"
+    },
+    "homepage": "https://github.com/glptrst/timestamp_microservice_2#readme"
 }
