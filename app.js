@@ -22,7 +22,7 @@ const server = http.createServer((req, res) => {
 	} else {
 	    var splittedUrl = req.url.split('/');
 	    //allow only url with format '/param'
-	    if (splittedUrl.length <= 2 || (splittedUrl.length === 3 && splittedUrl[2] === '')) {
+	    if (splittedUrl.length === 2 || (splittedUrl.length === 3 && splittedUrl[2] === '')) {
 		if (Number.isInteger(Number(splittedUrl[1]))) { // if param is an integer (a unix param)
 		    // set header
 		    res.statusCode = 200;
