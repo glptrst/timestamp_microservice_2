@@ -1,5 +1,6 @@
 "use strict";
 const http = require('http');
+const fs = require('fs');
 const timestamp = require('./timestamp.js');
 
 const port = process.env.PORT || 3000;
@@ -17,8 +18,11 @@ const server = http.createServer((req, res) => {
     if (req.method === 'GET') {
 	if (req.url === '/') {
 	    res.statusCode = 200;
-	    res.setHeader('Content-Type', 'text/plain');
-	    res.end('Hello World\n');
+//	    res.setHeader('Content-Type', 'text/plain');
+	    //	    res.end('Hello World\n');
+	    fs.readFile("./public/index.html", (err,fileContent) => {
+		res.end(fileContent);
+	    });
 	} else {
 	    var splittedUrl = req.url.split('/');
 	    //allow only url with format '/param'
