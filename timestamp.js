@@ -36,7 +36,7 @@ module.exports = {
 				var day = splitted[1].substring(0, splitted[1].length - 1);
 				var year = splitted[2];
 				var unixTimestamp = Date.parse(String(month + ' ' + day + ', ' + year + ' UTC'))/1000;
-				if (isNaN(unixTimestamp)) { // if Date.parse returns a NaN, then there is still something wrong in the string given as a input
+				if (Number.isNaN(unixTimestamp)) { // if Date.parse returns a NaN, then there is still something wrong in the string given as a input
 				    console.log(`bad value: ${value}. (ERR: isNaNTimestamp)`);
 				    return {unix: null, natural: null};
 				} else {
